@@ -1,0 +1,117 @@
+
+python-dotenv==1.0.0          # Gestion des variables d'environnement
+pyyaml==6.0.1                 # Lecture/écriture de fichiers YAML
+requests==2.31.0              # Requêtes HTTP
+urllib3==2.1.0                # Client HTTP (dépendance de requests)
+python-dateutil==2.8.2        # Parsing et manipulation de dates
+
+# ────────────────────────────────────────────────────────────────────────────
+# DJANGO - Framework web
+# ────────────────────────────────────────────────────────────────────────────
+Django==5.0                   # Framework web Django
+djangorestframework==3.14.0   # API REST pour Django
+django-cors-headers==4.3.1    # Gestion CORS
+django-filter==23.5           # Filtrage dans les API
+django-environ==0.11.2        # Gestion de la configuration via variables d'environnement
+drf-spectacular==0.27.0       # Documentation API automatique (Swagger/OpenAPI)
+
+# ────────────────────────────────────────────────────────────────────────────
+# WEB SCRAPING - Collecte de données
+# ────────────────────────────────────────────────────────────────────────────
+beautifulsoup4==4.12.2        # Parsing HTML/XML
+lxml==4.9.3                   # Parser XML/HTML rapide
+scrapy==2.11.0                # Framework de scraping avancé 
+selenium==4.15.2              # Automation de navigateur 
+feedparser==6.0.10            # Lecture de flux RSS/Atom
+
+# ────────────────────────────────────────────────────────────────────────────
+# API CLIENTS - Intégration avec services externes
+# ────────────────────────────────────────────────────────────────────────────
+PyGithub==2.1.1               # Client API GitHub
+python-gitlab==4.2.0          # Client API GitLab
+nvdlib==0.7.4                 # Client API NVD (National Vulnerability Database)
+
+# ────────────────────────────────────────────────────────────────────────────
+# DATA PROCESSING - Manipulation et analyse de données
+# ────────────────────────────────────────────────────────────────────────────
+pandas==2.0.3                 # Manipulation de données tabulaires
+numpy==1.26.2                 # Calculs numériques
+
+# ────────────────────────────────────────────────────────────────────────────
+# NLP - Traitement du langage naturel
+# ────────────────────────────────────────────────────────────────────────────
+nltk==3.8.1                   # Natural Language Toolkit
+spacy==3.7.2                  # NLP moderne et efficace
+textblob==0.17.1              # Analyse de sentiment simple
+
+# ────────────────────────────────────────────────────────────────────────────
+# MACHINE LEARNING - Classification et analyse
+# ────────────────────────────────────────────────────────────────────────────
+scikit-learn==1.3.2           # Machine Learning classique
+joblib==1.3.2                 # Sérialisation de modèles ML
+
+# ────────────────────────────────────────────────────────────────────────────
+# DATABASE - Drivers de base de données
+# ────────────────────────────────────────────────────────────────────────────
+psycopg2-binary==2.9.9        # Driver PostgreSQL
+mysqlclient==2.2.1            # Driver MySQL (optionnel)
+
+# ────────────────────────────────────────────────────────────────────────────
+# TASK SCHEDULING - Automatisation et tâches planifiées
+# ────────────────────────────────────────────────────────────────────────────
+celery==5.3.4                 # Tâches asynchrones
+django-celery-beat==2.5.0     # Planification de tâches périodiques avec Django
+django-celery-results==2.5.1  # Stockage des résultats Celery dans Django
+redis==5.0.1                  # Cache et broker pour Celery
+
+# ────────────────────────────────────────────────────────────────────────────
+# REPORTING - Génération de rapports
+# ────────────────────────────────────────────────────────────────────────────
+reportlab==4.0.7              # Génération de PDF
+weasyprint==60.1              # HTML vers PDF (alternative)
+openpyxl==3.1.2               # Manipulation de fichiers Excel
+xhtml2pdf==0.2.13             # Conversion HTML vers PDF
+django-weasyprint==2.3.0      # Intégration WeasyPrint avec Django
+
+# ────────────────────────────────────────────────────────────────────────────
+# VISUALIZATION - Graphiques et visualisations
+# ────────────────────────────────────────────────────────────────────────────
+matplotlib==3.8.2             # Graphiques statiques
+plotly==5.18.0                # Graphiques interactifs
+seaborn==0.13.0               # Visualisations statistiques
+
+# ────────────────────────────────────────────────────────────────────────────
+# NOTIFICATIONS - Envoi d'alertes
+# ────────────────────────────────────────────────────────────────────────────
+python-telegram-bot==20.7     # Bot Telegram (optionnel)
+slack-sdk==3.26.1             # Client Slack
+discord-webhook==1.3.1        # Webhooks Discord
+
+# ────────────────────────────────────────────────────────────────────────────
+# EMAIL - Envoi d'emails
+# ────────────────────────────────────────────────────────────────────────────
+email-validator==2.1.0        # Validation d'adresses email
+
+# ────────────────────────────────────────────────────────────────────────────
+# SECURITY - Sécurité et cryptographie
+# ────────────────────────────────────────────────────────────────────────────
+cryptography==41.0.7          # Cryptographie
+djangorestframework-simplejwt==5.3.1  # JWT pour Django REST Framework
+
+# ────────────────────────────────────────────────────────────────────────────
+# UTILITIES - Utilitaires divers
+# ────────────────────────────────────────────────────────────────────────────
+tqdm==4.66.1                  # Barres de progression
+rich==13.7.0                  # Affichage enrichi dans le terminal
+validators==0.22.0            # Validation de données
+pillow==10.1.0                # Manipulation d'images (requis par Django)
+
+# ────────────────────────────────────────────────────────────────────────────
+# ADMIN ENHANCEMENTS - Amélioration de l'interface admin Django
+# ────────────────────────────────────────────────────────────────────────────
+django-import-export==3.3.5   # Import/Export de données dans l'admin
+django-admin-rangefilter==0.12.1  # Filtres de date dans l'admin
+django-debug-toolbar==4.2.0   # Barre de debug (développement uniquement)
+
+
+

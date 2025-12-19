@@ -1,0 +1,10 @@
+# Environnement virtuel
+venv/
+.env
+
+# Django
+db.sqlite3
+__pycache__/
+*.pyc
+*.pyo
+*.log
