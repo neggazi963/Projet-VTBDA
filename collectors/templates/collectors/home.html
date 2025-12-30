@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vulnerability Scanner</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        min-height: 90vh;
+      }
+
+      header {
+        background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      header h1 {
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .main-content {
+        padding: 40px;
+      }
+
+      .search-section {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .search-box {
+        max-width: 800px;
+        margin: 0 auto 30px;
+      }
+
+      .search-form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      #searchInput {
+        flex: 1;
+        padding: 18px 25px;
+        font-size: 18px;
+        border: 2px solid #ddd;
+        border-radius: 50px;
+        outline: none;
+        transition: all 0.3s;
+      }
+
+      #searchInput:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+      }
+
+      .search-btn {
+        padding: 18px 40px;
+        font-size: 18px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        font-weight: 600;
+      }
+
+      .search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .search-btn:active {
+        transform: translateY(0);
+      }
+
+      .examples {
+        color: #666;
+        font-size: 16px;
+        margin-top: 15px;
+      }
+
+      .recent-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-top: 40px;
+      }
+
+      .section-card {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #2c3e50;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #667eea;
+      }
+
+      .vuln-list,
+      .search-list {
+        list-style: none;
+      }
+
+      .vuln-item,
+      .search-item {
+        padding: 15px;
+        margin-bottom: 10px;
+        background: white;
+        border-radius: 8px;
+        border-left: 4px solid;
+        transition: transform 0.3s;
+      }
+
+      .vuln-item:hover,
+      .search-item:hover {
+        transform: translateX(5px);
+      }
+
+      .vuln-item.CRITICAL {
+        border-left-color: #dc3545;
+      }
+      .vuln-item.HIGH {
+        border-left-color: #fd7e14;
+      }
+      .vuln-item.MEDIUM {
+        border-left-color: #ffc107;
+      }
+      .vuln-item.LOW {
+        border-left-color: #28a745;
+      }
+
+      .vuln-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #2c3e50;
+      }
+
+      .vuln-id {
+        font-family: monospace;
+        color: #667eea;
+        font-size: 14px;
+      }
+
+      .vuln-date {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .search-query {
+        font-weight: 600;
+        color: #2c3e50;
+      }
+
+      .search-results {
+        font-size: 14px;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 15px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      #results {
+        margin-top: 40px;
+        min-height: 200px;
+      }
+
+      .results-header {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #2c3e50;
+      }
+
+      .results-stats {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .results-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+      }
+
+      .vuln-card {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #eaeaea;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .vuln-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .vuln-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+      }
+
+      .vuln-card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 5px;
+      }
+
+      .severity-badge {
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .severity-CRITICAL {
+        background: #dc3545;
+        color: white;
+      }
+      .severity-HIGH {
+        background: #fd7e14;
+        color: white;
+      }
+      .severity-MEDIUM {
+        background: #ffc107;
+        color: #212529;
+      }
+      .severity-LOW {
+        background: #28a745;
+        color: white;
+      }
+
+      .vuln-card-description {
+        color: #666;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .vuln-card-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        color: #666;
+        border-top: 1px solid #eee;
+        padding-top: 15px;
+      }
+
+      .vuln-card-source {
+        background: #f8f9fa;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+
+      .vuln-card-link {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .vuln-card-link:hover {
+        text-decoration: underline;
+      }
+
+      footer {
+        text-align: center;
+        padding: 30px;
+        color: #666;
+        border-top: 1px solid #eee;
+        margin-top: 40px;
+      }
+
+      .sources-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px 25px;
+        border-radius: 25px;
+        font-size: 14px;
+        margin-top: 15px;
+        font-weight: 600;
+      }
+
+      @media (max-width: 768px) {
+        .recent-section {
+          grid-template-columns: 1fr;
+        }
+
+        .results-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .search-form {
+          flex-direction: column;
+        }
+
+        .search-btn {
+          width: 100%;
+        }
+
+        header h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🔍 Vulnerability Scanner</h1>
+        <p>
+          Search across multiple security databases for vulnerabilities, CVEs,
+          and security advisories
+        </p>
+      </header>
+
+      <div class="main-content">
+        <div class="search-section">
+          <div class="search-box">
+            <h2 style="margin-bottom: 20px; color: #2c3e50">
+              Find Vulnerabilities
+            </h2>
+            <form id="searchForm" class="search-form">
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Enter vulnerability name, CVE ID, package, or keyword..."
+                required
+              />
+              <button type="submit" class="search-btn">Search</button>
+            </form>
+            <div class="examples">
+              Try: "log4j", "CVE-2021-44228", "python", "apache", "windows",
+              "linux kernel"
+            </div>
+          </div>
+
+          <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Searching across multiple sources... This may take a moment.</p>
+          </div>
+
+          <div id="results"></div>
+        </div>
+
+        <div class="recent-section">
+          <div class="section-card">
+            <h3 class="section-title">Recent Vulnerabilities</h3>
+            <ul class="vuln-list">
+              {% for vuln in recent_vulnerabilities %}
+              <li class="vuln-item {{ vuln.severity }}">
+                <div class="vuln-title">{{ vuln.title|truncatechars:50 }}</div>
+                <div class="vuln-id">{{ vuln.cve_id }}</div>
+                <div class="vuln-date">
+                  {{ vuln.published_date|date:"M d, Y" }}
+                </div>
+              </li>
+              {% empty %}
+              <li>No recent vulnerabilities found. Start a search!</li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="section-card">
+            <h3 class="section-title">Recent Searches</h3>
+            <ul class="search-list">
+              {% for search in recent_searches %}
+              <li class="search-item">
+                <div class="search-query">{{ search.query }}</div>
+                <div class="search-results">
+                  {{ search.results_count }} results • {{
+                  search.created_at|timesince }} ago
+                </div>
+              </li>
+              {% empty %}
+              <li>No recent searches</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <p>
+          Vulnerability Scanner v1.0 • Scraping data from multiple security
+          sources
+        </p>
+        <div class="sources-badge">
+          Powered by NVD, CISA, SecurityFocus, PacketStorm & more
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      document
+        .getElementById("searchForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const query = document.getElementById("searchInput").value.trim();
+
+          if (query.length < 2) {
+            alert("Please enter at least 2 characters");
+            return;
+          }
+
+          // Show loading
+          document.getElementById("loading").style.display = "block";
+          document.getElementById("results").innerHTML = "";
+
+          // Make API request
+          fetch("/collectors/api/search/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: JSON.stringify({ query: query }),
+            timeout: 30000,
+          })
+            .then(async (response) => {
+              const data = await response.json();
+              console.log(data);
+              return data;
+            })
+            .then((data) => {
+              document.getElementById("loading").style.display = "none";
+
+              if (data.success) {
+                displayResults(data);
+              } else {
+                document.getElementById(
+                  "results"
+                ).innerHTML = `<div style="background: #ffebee; color: #c62828; padding: 20px; border-radius: 8px;">
+                            <strong>Error:</strong> ${data.error}
+                         </div>`;
+              }
+            })
+            .catch((error) => {
+              document.getElementById("loading").style.display = "none";
+              document.getElementById(
+                "results"
+              ).innerHTML = `<div style="background: #ffebee; color: #c62828; padding: 20px; border-radius: 8px;">
+                        <strong>Network Error:</strong> ${error.message}
+                     </div>`;
+            });
+        });
+
+      function displayResults(data) {
+        let html = `
+                <div class="results-header">Search Results for: "${
+                  data.query
+                }"</div>
+                <div class="results-stats">
+                    <div>
+                        <strong>${
+                          data.total_found
+                        }</strong> vulnerabilities found
+                    </div>
+                    <div>
+                        <strong>${data.saved_to_db}</strong> saved to database
+                    </div>
+                    <div>
+                        <strong>${
+                          Object.keys(data.results_by_source).length
+                        }</strong> sources searched
+                    </div>
+                </div>
+            `;
+
+        if (data.vulnerabilities && data.vulnerabilities.length > 0) {
+          html += '<div class="results-grid">';
+
+          data.vulnerabilities.forEach((vuln) => {
+            html += `
+                    <div class="vuln-card">
+                        <div class="vuln-card-header">
+                            <div>
+                                <div class="vuln-card-title">${vuln.title}</div>
+                                <div style="font-family: monospace; color: #667eea; font-size: 14px; margin-top: 5px;">
+                                    ${vuln.cve_id}
+                                </div>
+                            </div>
+                            <span class="severity-badge severity-${
+                              vuln.severity
+                            }">${vuln.severity}</span>
+                        </div>
+                        
+                        <div class="vuln-card-description">
+                            ${vuln.description}
+                        </div>
+                        
+                        ${
+                          vuln.cvss_score
+                            ? `
+                        <div style="margin-bottom: 15px;">
+                            <strong>CVSS Score:</strong> ${vuln.cvss_score}/10.0
+                        </div>
+                        `
+                            : ""
+                        }
+                        
+                        ${
+                          vuln.affected_packages &&
+                          vuln.affected_packages.length > 0
+                            ? `
+                        <div style="margin-bottom: 15px;">
+                            <strong>Affected Packages:</strong> ${vuln.affected_packages.join(
+                              ", "
+                            )}
+                        </div>
+                        `
+                            : ""
+                        }
+                        
+                        <div class="vuln-card-meta">
+                            <div>
+                                <span class="vuln-card-source">${
+                                  vuln.source
+                                }</span>
+                                <div style="margin-top: 5px; font-size: 12px;">${
+                                  vuln.published_date || "Date unknown"
+                                }</div>
+                            </div>
+                            <a href="${
+                              vuln.source_url
+                            }" target="_blank" class="vuln-card-link">View Details →</a>
+                        </div>
+                    </div>
+                    `;
+          });
+
+          html += "</div>";
+
+          // Add source breakdown
+          html += `
+                <div style="margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    <h3 style="margin-bottom: 15px; color: #2c3e50;">Results by Source</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                `;
+
+          Object.entries(data.results_by_source).forEach(([source, count]) => {
+            html += `<span style="background: white; padding: 8px 15px; border-radius: 20px; font-size: 14px;">
+                                ${source}: <strong>${count}</strong>
+                             </span>`;
+          });
+
+          html += "</div></div>";
+        } else {
+          html += `
+                <div style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 10px;">
+                    <div style="font-size: 48px; margin-bottom: 20px;">😕</div>
+                    <h3 style="color: #666; margin-bottom: 10px;">No vulnerabilities found</h3>
+                    <p>Try a different search term or check the spelling.</p>
+                </div>
+                `;
+        }
+
+        document.getElementById("results").innerHTML = html;
+      }
+
+      // CSRF token helper for Django
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+          const cookies = document.cookie.split(";");
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === name + "=") {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    </script>
+  </body>
+</html>

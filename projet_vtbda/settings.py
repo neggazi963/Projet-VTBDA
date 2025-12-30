@@ -31,12 +31,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "rest_framework",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
+    "collectors",
 ]
 
 MIDDLEWARE = [
@@ -115,3 +118,39 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+
+
+
+
+
+
+VULNERABILITY_SCANNER = {
+    'NVD_API_URL': 'https://services.nvd.nist.gov/rest/json',
+    'GITHUB_TOKEN': '',  # Add your GitHub token
+    'SNYK_TOKEN': '',    # Add your Snyk token
+    'MAX_RESULTS_PER_SOURCE': 50,
+    'REQUEST_TIMEOUT': 30,
+}
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+RATE_LIMIT_CALLS_PER_MINUTE = 10
+GITHUB_TOKEN = ''  # Get from: https://github.com/settings/tokens (no special permissions needed)
+VULNCHECK_TOKEN = ''  # Get free tier from: https://vulncheck.com/
+VULNERS_TOKEN = ''  # Get from: https://vulners.com/
+
+# Optional: Add these for better searching
+VULNERABILITY_SOURCES = {
+    'ENABLE_NVD': True,
+    'ENABLE_OSV': True,
+    'ENABLE_CVE_DETAILS': True,
+    'ENABLE_EXPLOIT_DB': True,
+    'ENABLE_GITHUB': False,  # Set to True if you have token
+    'ENABLE_VULNCHECK': False,  # Set to True if you have token
+    'ENABLE_VULNERS': False,  # Set to True if you have token
+}
